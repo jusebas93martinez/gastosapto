@@ -1,0 +1,2 @@
+# gastosapto
+Gasto del apartamento
