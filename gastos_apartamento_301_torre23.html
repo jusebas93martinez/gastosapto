@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         
         .container {
@@ -35,12 +35,12 @@
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 22px;
             margin-bottom: 5px;
         }
         
         .header p {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
         }
         
@@ -61,13 +61,13 @@
         }
         
         .form-section {
-            padding: 30px;
+            padding: 20px 15px;
             border-bottom: 2px solid #f0f0f0;
         }
         
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr;
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -125,13 +125,13 @@
         }
         
         .filters-section {
-            padding: 20px 30px;
+            padding: 15px;
             background: #f8f9fa;
             border-bottom: 2px solid #e0e0e0;
         }
         
         .filters-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 15px;
             color: #333;
@@ -142,8 +142,8 @@
         
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
         
         .filter-group {
@@ -182,42 +182,43 @@
         }
         
         .stats-section {
-            padding: 20px 30px;
+            padding: 15px;
             background: #fff9e6;
             border-bottom: 2px solid #f0f0f0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
         
         .stat-card {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             margin-bottom: 5px;
         }
         
         .stat-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #667eea;
         }
         
         .table-section {
-            padding: 30px;
+            padding: 15px;
             overflow-x: auto;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 12px;
         }
         
         thead {
@@ -225,16 +226,18 @@
         }
         
         th {
-            padding: 15px;
+            padding: 10px 5px;
             text-align: left;
             font-weight: 600;
             color: #555;
             border-bottom: 2px solid #e0e0e0;
+            font-size: 11px;
         }
         
         td {
-            padding: 15px;
+            padding: 10px 5px;
             border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
         }
         
         tbody tr:hover {
@@ -243,10 +246,11 @@
         
         .categoria-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
+            white-space: nowrap;
         }
         
         .cat-servicios { background: #e3f2fd; color: #1976d2; }
@@ -255,16 +259,18 @@
         .cat-mantenimiento { background: #fce4ec; color: #c2185b; }
         .cat-salud { background: #f3e5f5; color: #7b1fa2; }
         .cat-entretenimiento { background: #e0f2f1; color: #00796b; }
+        .cat-administracion { background: #fff9c4; color: #f57f17; }
+        .cat-deudas { background: #ffebee; color: #c62828; }
         .cat-otros { background: #f5f5f5; color: #616161; }
         
         .btn-eliminar {
-            padding: 6px 12px;
+            padding: 5px 8px;
             background: #ff4757;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             transition: background 0.3s;
         }
         
@@ -349,6 +355,8 @@
                             <option value="Mercado">🛒 Mercado</option>
                             <option value="Transporte">🚗 Transporte</option>
                             <option value="Mantenimiento">🔧 Mantenimiento</option>
+                            <option value="Administracion">🏢 Administración</option>
+                            <option value="Deudas">💳 Deudas</option>
                             <option value="Salud">💊 Salud</option>
                             <option value="Entretenimiento">🎬 Entretenimiento</option>
                             <option value="Otros">📌 Otros</option>
@@ -391,6 +399,8 @@
                         <option value="Mercado">Mercado</option>
                         <option value="Transporte">Transporte</option>
                         <option value="Mantenimiento">Mantenimiento</option>
+                        <option value="Administracion">Administración</option>
+                        <option value="Deudas">Deudas</option>
                         <option value="Salud">Salud</option>
                         <option value="Entretenimiento">Entretenimiento</option>
                         <option value="Otros">Otros</option>
@@ -433,28 +443,23 @@
                 <div class="stat-label">Cantidad</div>
                 <div class="stat-value" id="statCantidad">0</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Promedio</div>
-                <div class="stat-value" id="statPromedio">$0</div>
-            </div>
         </div>
         
         <div class="table-section">
             <table id="tablaGastos">
                 <thead>
                     <tr>
-                        <th style="width: 10%">Fecha</th>
-                        <th style="width: 15%">Categoría</th>
+                        <th style="width: 12%">Fecha</th>
+                        <th style="width: 18%">Categoría</th>
                         <th style="width: 20%">Motivo</th>
                         <th style="width: 15%">Pagado a</th>
-                        <th style="width: 12%">Valor</th>
-                        <th style="width: 18%">Comentario</th>
-                        <th style="width: 10%">Acción</th>
+                        <th style="width: 15%">Valor</th>
+                        <th style="width: 12%">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
                     <tr class="empty-state">
-                        <td colspan="7">
+                        <td colspan="6">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -496,7 +501,9 @@
                 'Servicios': 'cat-servicios',
                 'Mercado': 'cat-mercado',
                 'Transporte': 'cat-transporte',
-                'Construcción': 'cat-mantenimiento',
+                'Mantenimiento': 'cat-mantenimiento',
+                'Administracion': 'cat-administracion',
+                'Deudas': 'cat-deudas',
                 'Salud': 'cat-salud',
                 'Entretenimiento': 'cat-entretenimiento',
                 'Otros': 'cat-otros'
@@ -537,11 +544,9 @@
         function actualizarEstadisticas(gastos) {
             const total = gastos.reduce((sum, g) => sum + (g.valor || 0), 0);
             const cantidad = gastos.length;
-            const promedio = cantidad > 0 ? total / cantidad : 0;
             
             document.getElementById('statTotal').textContent = formatCOP(total);
             document.getElementById('statCantidad').textContent = cantidad;
-            document.getElementById('statPromedio').textContent = formatCOP(promedio);
             document.getElementById('totalGastos').textContent = formatCOP(total);
         }
         
@@ -551,7 +556,7 @@
             if (!gastos || gastos.length === 0) {
                 tbody.innerHTML = `
                     <tr class="empty-state">
-                        <td colspan="7">
+                        <td colspan="6">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -564,12 +569,11 @@
             
             tbody.innerHTML = gastos.map(gasto => `
                 <tr>
-                    <td>${new Date(gasto.fecha).toLocaleDateString('es-CO')}</td>
+                    <td>${new Date(gasto.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit' })}</td>
                     <td><span class="categoria-badge ${getCategoriaClass(gasto.categoria)}">${gasto.categoria}</span></td>
                     <td>${gasto.motivo}</td>
                     <td>${gasto.pagado_a || '-'}</td>
                     <td><strong>${formatCOP(gasto.valor)}</strong></td>
-                    <td style="font-size: 12px; color: #666;">${gasto.comentario || '-'}</td>
                     <td>
                         <button class="btn-eliminar" onclick="eliminarGasto(${gasto.id})">🗑️</button>
                     </td>
