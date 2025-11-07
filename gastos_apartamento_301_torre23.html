@@ -44,6 +44,26 @@
             opacity: 0.9;
         }
         
+        .sync-status {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .sync-status.connected {
+            background: rgba(76, 217, 100, 0.3);
+        }
+        
+        .sync-status.disconnected {
+            background: rgba(255, 59, 48, 0.3);
+        }
+        
         .form-section {
             padding: 30px;
             border-bottom: 2px solid #f0f0f0;
@@ -61,7 +81,7 @@
             font-size: 14px;
         }
         
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -70,7 +90,7 @@
             transition: border-color 0.3s;
         }
         
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -95,6 +115,12 @@
         
         .btn-agregar:active {
             transform: translateY(0);
+        }
+        
+        .btn-agregar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .table-section {
@@ -143,6 +169,11 @@
             background: #ff3838;
         }
         
+        .btn-eliminar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
         .total-section {
             background: #f8f9fa;
             padding: 25px 30px;
@@ -175,6 +206,36 @@
             opacity: 0.3;
         }
         
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .alert {
+            padding: 15px;
+            margin: 20px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+        
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 22px;
@@ -195,6 +256,15 @@
         <div class="header">
             <h1>📊 Control de Gastos</h1>
             <p>Apartamento 301 - Torre 23</p>
+            <div class="sync-status" id="syncStatus">
+                <span id="syncIcon">🔄</span>
+                <span id="syncText">Conectando...</span>
+            </div>
+        </div>
+        
+        <div id="configAlert" class="alert alert-warning" style="display: none;">
+            ⚠️ <strong>Configuración pendiente:</strong> Para que la aplicación funcione, necesitas configurar Supabase. 
+            <a href="#" onclick="mostrarInstrucciones(); return false;" style="color: #004085; text-decoration: underline;">Ver instrucciones</a>
         </div>
         
         <div class="form-section">
@@ -214,7 +284,7 @@
                     <input type="number" id="valor" placeholder="0" min="0" step="100" required>
                 </div>
                 
-                <button type="submit" class="btn-agregar">➕ Agregar Gasto</button>
+                <button type="submit" class="btn-agregar" id="btnAgregar">➕ Agregar Gasto</button>
             </form>
         </div>
         
@@ -229,14 +299,8 @@
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
-                    <tr class="empty-state">
-                        <td colspan="4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            <p>No hay gastos registrados aún</p>
-                            <p style="font-size: 14px; margin-top: 5px;">Agrega tu primer gasto usando el formulario arriba</p>
-                        </td>
+                    <tr class="loading">
+                        <td colspan="4">Cargando gastos</td>
                     </tr>
                 </tbody>
             </table>
@@ -248,8 +312,41 @@
         </div>
     </div>
     
-    <script>
-        let gastos = [];
+    <!-- Supabase SDK -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        const SUPABASE_URL = 'https://uqulhiwaozqfmjaqgigx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxdWxoaXdhb3pxZm1qYXFnaWd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0Njg0OTEsImV4cCI6MjA3ODA0NDQ5MX0.zn2jZ_ZBetn2CQLkUInyNG83sY-Fixtatpl4by9OJDY';
+        
+        // Verificar si está configurado
+        const isConfigured = true;
+        
+        if (!isConfigured) {
+            document.getElementById('configAlert').style.display = 'block';
+            actualizarEstadoConexion(false, 'No configurado');
+        }
+        
+        // Inicializar Supabase
+        let supabase;
+        
+        try {
+            if (isConfigured) {
+                supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                actualizarEstadoConexion(true, 'Conectado');
+                cargarGastos();
+            }
+        } catch (error) {
+            console.error("Error al inicializar Supabase:", error);
+            actualizarEstadoConexion(false, 'Error de conexión');
+        }
+        
+        // ============================================
+        // FUNCIONES PRINCIPALES
+        // ============================================
         
         // Establecer fecha actual por defecto
         document.getElementById('fecha').valueAsDate = new Date();
@@ -263,17 +360,34 @@
             }).format(valor);
         }
         
-        // Calcular total
-        function calcularTotal() {
-            const total = gastos.reduce((sum, gasto) => sum + gasto.valor, 0);
+        // Actualizar estado de conexión
+        function actualizarEstadoConexion(conectado, mensaje) {
+            const statusDiv = document.getElementById('syncStatus');
+            const iconSpan = document.getElementById('syncIcon');
+            const textSpan = document.getElementById('syncText');
+            
+            if (conectado) {
+                statusDiv.className = 'sync-status connected';
+                iconSpan.textContent = '✓';
+                textSpan.textContent = mensaje || 'Sincronizado';
+            } else {
+                statusDiv.className = 'sync-status disconnected';
+                iconSpan.textContent = '✗';
+                textSpan.textContent = mensaje || 'Desconectado';
+            }
+        }
+        
+        // Calcular y mostrar total
+        function calcularTotal(gastos) {
+            const total = gastos.reduce((sum, gasto) => sum + (gasto.valor || 0), 0);
             document.getElementById('totalGastos').textContent = formatCOP(total);
         }
         
         // Renderizar tabla
-        function renderizarTabla() {
+        function renderizarTabla(gastos) {
             const tbody = document.getElementById('cuerpoTabla');
             
-            if (gastos.length === 0) {
+            if (!gastos || gastos.length === 0) {
                 tbody.innerHTML = `
                     <tr class="empty-state">
                         <td colspan="4">
@@ -288,62 +402,139 @@
                 return;
             }
             
-            tbody.innerHTML = gastos.map((gasto, index) => `
+            tbody.innerHTML = gastos.map(gasto => `
                 <tr>
-                    <td>${new Date(gasto.fecha + 'T00:00:00').toLocaleDateString('es-CO')}</td>
+                    <td>${new Date(gasto.fecha).toLocaleDateString('es-CO')}</td>
                     <td>${gasto.motivo}</td>
                     <td><strong>${formatCOP(gasto.valor)}</strong></td>
                     <td>
-                        <button class="btn-eliminar" onclick="eliminarGasto(${index})">🗑️ Eliminar</button>
+                        <button class="btn-eliminar" onclick="eliminarGasto(${gasto.id})">🗑️ Eliminar</button>
                     </td>
                 </tr>
             `).join('');
         }
         
-        // Agregar gasto
-        document.getElementById('gastoForm').addEventListener('submit', (e) => {
-            e.preventDefault();
+        // Cargar gastos desde Supabase
+        async function cargarGastos() {
+            if (!isConfigured) {
+                document.getElementById('cuerpoTabla').innerHTML = `
+                    <tr class="empty-state">
+                        <td colspan="4">
+                            <p style="color: #ff6b6b;">⚠️ Supabase no configurado</p>
+                            <p style="font-size: 14px; margin-top: 10px;">Por favor configura Supabase siguiendo las instrucciones</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
             
-            const fecha = document.getElementById('fecha').value;
-            const motivo = document.getElementById('motivo').value;
-            const valor = parseInt(document.getElementById('valor').value);
-            
-            gastos.push({ fecha, motivo, valor });
-            
-            // Ordenar por fecha (más reciente primero)
-            gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-            
-            renderizarTabla();
-            calcularTotal();
-            
-            // Limpiar formulario excepto fecha
-            document.getElementById('motivo').value = '';
-            document.getElementById('valor').value = '';
-            document.getElementById('motivo').focus();
-            
-            // Guardar en localStorage
-            localStorage.setItem('gastosApto301', JSON.stringify(gastos));
-        });
-        
-        // Eliminar gasto
-        function eliminarGasto(index) {
-            if (confirm('¿Estás seguro de eliminar este gasto?')) {
-                gastos.splice(index, 1);
-                renderizarTabla();
-                calcularTotal();
-                localStorage.setItem('gastosApto301', JSON.stringify(gastos));
+            try {
+                const { data, error } = await supabase
+                    .from('gastos')
+                    .select('*')
+                    .order('fecha', { ascending: false });
+                
+                if (error) throw error;
+                
+                renderizarTabla(data);
+                calcularTotal(data);
+            } catch (error) {
+                console.error("Error al cargar gastos:", error);
+                actualizarEstadoConexion(false, 'Error al cargar');
             }
         }
         
-        // Cargar datos guardados
-        window.addEventListener('load', () => {
-            const datosGuardados = localStorage.getItem('gastosApto301');
-            if (datosGuardados) {
-                gastos = JSON.parse(datosGuardados);
-                renderizarTabla();
-                calcularTotal();
+        // Agregar gasto
+        document.getElementById('gastoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!isConfigured) {
+                alert('Por favor configura Supabase primero. Revisa las instrucciones.');
+                return;
+            }
+            
+            const btnAgregar = document.getElementById('btnAgregar');
+            btnAgregar.disabled = true;
+            btnAgregar.textContent = 'Guardando...';
+            
+            try {
+                const fecha = document.getElementById('fecha').value;
+                const motivo = document.getElementById('motivo').value;
+                const valor = parseInt(document.getElementById('valor').value);
+                
+                const { error } = await supabase
+                    .from('gastos')
+                    .insert([{ fecha, motivo, valor }]);
+                
+                if (error) throw error;
+                
+                // Limpiar formulario
+                document.getElementById('motivo').value = '';
+                document.getElementById('valor').value = '';
+                document.getElementById('motivo').focus();
+                
+                // Recargar gastos
+                await cargarGastos();
+                
+            } catch (error) {
+                console.error("Error al agregar gasto:", error);
+                alert('Error al guardar el gasto. Por favor intenta de nuevo.');
+            } finally {
+                btnAgregar.disabled = false;
+                btnAgregar.textContent = '➕ Agregar Gasto';
             }
         });
+        
+        // Eliminar gasto (función global)
+        window.eliminarGasto = async (id) => {
+            if (!confirm('¿Estás seguro de eliminar este gasto?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('gastos')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                // Recargar gastos
+                await cargarGastos();
+            } catch (error) {
+                console.error("Error al eliminar gasto:", error);
+                alert('Error al eliminar el gasto. Por favor intenta de nuevo.');
+            }
+        };
+        
+        // Suscribirse a cambios en tiempo real
+        if (isConfigured && supabase) {
+            supabase
+                .channel('gastos-changes')
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'gastos' },
+                    () => {
+                        cargarGastos();
+                    }
+                )
+                .subscribe();
+        }
+        
+        // Mostrar instrucciones
+        window.mostrarInstrucciones = () => {
+            alert(`
+📋 INSTRUCCIONES DE CONFIGURACIÓN:
+
+1. Ve a https://supabase.com
+2. Crea una cuenta gratuita
+3. Crea un nuevo proyecto
+4. Ve a "Table Editor" y crea la tabla "gastos"
+5. Copia la URL y la ANON KEY
+6. Reemplázalas en el código HTML
+7. ¡Listo!
+
+Revisa el archivo de instrucciones detalladas.
+            `);
+        };
+        
     </script>
 </body>
 </html>
