@@ -19,7 +19,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -60,17 +60,20 @@
             background: rgba(76, 217, 100, 0.3);
         }
         
-        .sync-status.disconnected {
-            background: rgba(255, 59, 48, 0.3);
-        }
-        
         .form-section {
             padding: 30px;
             border-bottom: 2px solid #f0f0f0;
         }
         
-        .form-group {
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 0;
         }
         
         .form-group label {
@@ -81,7 +84,8 @@
             font-size: 14px;
         }
         
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -90,7 +94,8 @@
             transition: border-color 0.3s;
         }
         
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -113,14 +118,96 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
         
-        .btn-agregar:active {
-            transform: translateY(0);
-        }
-        
         .btn-agregar:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+        
+        .filters-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .filters-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .btn-clear-filters {
+            padding: 8px 15px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            align-self: flex-end;
+        }
+        
+        .btn-clear-filters:hover {
+            background: #ff5252;
+        }
+        
+        .stats-section {
+            padding: 20px 30px;
+            background: #fff9e6;
+            border-bottom: 2px solid #f0f0f0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
         }
         
         .table-section {
@@ -154,6 +241,22 @@
             background: #f8f9fa;
         }
         
+        .categoria-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .cat-servicios { background: #e3f2fd; color: #1976d2; }
+        .cat-mercado { background: #e8f5e9; color: #388e3c; }
+        .cat-transporte { background: #fff3e0; color: #f57c00; }
+        .cat-mantenimiento { background: #fce4ec; color: #c2185b; }
+        .cat-salud { background: #f3e5f5; color: #7b1fa2; }
+        .cat-entretenimiento { background: #e0f2f1; color: #00796b; }
+        .cat-otros { background: #f5f5f5; color: #616161; }
+        
         .btn-eliminar {
             padding: 6px 12px;
             background: #ff4757;
@@ -169,11 +272,6 @@
             background: #ff3838;
         }
         
-        .btn-eliminar:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
         .total-section {
             background: #f8f9fa;
             padding: 25px 30px;
@@ -182,10 +280,6 @@
             align-items: center;
             font-size: 20px;
             font-weight: 700;
-        }
-        
-        .total-label {
-            color: #555;
         }
         
         .total-amount {
@@ -206,47 +300,25 @@
             opacity: 0.3;
         }
         
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #667eea;
-        }
-        
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-        
-        .alert {
-            padding: 15px;
-            margin: 20px 30px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .alert-warning {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            color: #856404;
-        }
-        
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 22px;
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             table {
-                font-size: 14px;
+                font-size: 12px;
             }
             
             th, td {
-                padding: 10px;
+                padding: 8px;
             }
         }
     </style>
@@ -256,102 +328,161 @@
         <div class="header">
             <h1>📊 Control de Gastos</h1>
             <p>Apartamento 301 - Torre 23</p>
-            <div class="sync-status" id="syncStatus">
-                <span id="syncIcon">🔄</span>
-                <span id="syncText">Conectando...</span>
+            <div class="sync-status connected" id="syncStatus">
+                <span id="syncIcon">✓</span>
+                <span id="syncText">Sincronizado</span>
             </div>
-        </div>
-        
-        <div id="configAlert" class="alert alert-warning" style="display: none;">
-            ⚠️ <strong>Configuración pendiente:</strong> Para que la aplicación funcione, necesitas configurar Supabase. 
-            <a href="#" onclick="mostrarInstrucciones(); return false;" style="color: #004085; text-decoration: underline;">Ver instrucciones</a>
         </div>
         
         <div class="form-section">
             <form id="gastoForm">
-                <div class="form-group">
-                    <label for="fecha">Fecha</label>
-                    <input type="date" id="fecha" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="motivo">Motivo del Gasto</label>
-                    <input type="text" id="motivo" placeholder="Ej: Servicios públicos, mercado, reparaciones..." required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="valor">Valor (COP)</label>
-                    <input type="number" id="valor" placeholder="0" min="0" step="100" required>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fecha">Fecha *</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="categoria">Categoría *</label>
+                        <select id="categoria" required>
+                            <option value="Servicios">🔌 Servicios públicos</option>
+                            <option value="Mercado">🛒 Mercado</option>
+                            <option value="Transporte">🚗 Transporte</option>
+                            <option value="Mantenimiento">🔧 Mantenimiento</option>
+                            <option value="Salud">💊 Salud</option>
+                            <option value="Entretenimiento">🎬 Entretenimiento</option>
+                            <option value="Otros">📌 Otros</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="motivo">Motivo del Gasto *</label>
+                        <input type="text" id="motivo" placeholder="Ej: Agua, Luz, Mercado..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pagado_a">Pagado a</label>
+                        <input type="text" id="pagado_a" placeholder="Ej: EPM, Exito, Juan...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valor">Valor (COP) *</label>
+                        <input type="number" id="valor" placeholder="0" min="0" step="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comentario">Comentario</label>
+                        <input type="text" id="comentario" placeholder="Nota adicional...">
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn-agregar" id="btnAgregar">➕ Agregar Gasto</button>
             </form>
         </div>
         
+        <div class="filters-section">
+            <div class="filters-title">🔍 Filtros</div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Categoría</label>
+                    <select id="filterCategoria">
+                        <option value="">Todas</option>
+                        <option value="Servicios">Servicios públicos</option>
+                        <option value="Mercado">Mercado</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Mantenimiento">Mantenimiento</option>
+                        <option value="Salud">Salud</option>
+                        <option value="Entretenimiento">Entretenimiento</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Pagado a</label>
+                    <input type="text" id="filterPagadoA" placeholder="Buscar...">
+                </div>
+                
+                <div class="filter-group">
+                    <label>Motivo</label>
+                    <input type="text" id="filterMotivo" placeholder="Buscar...">
+                </div>
+                
+                <div class="filter-group">
+                    <label>Desde fecha</label>
+                    <input type="date" id="filterFechaDesde">
+                </div>
+                
+                <div class="filter-group">
+                    <label>Hasta fecha</label>
+                    <input type="date" id="filterFechaHasta">
+                </div>
+                
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn-clear-filters" onclick="limpiarFiltros()">🗑️ Limpiar filtros</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-section" id="statsSection">
+            <div class="stat-card">
+                <div class="stat-label">Total Gastos</div>
+                <div class="stat-value" id="statTotal">$0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Cantidad</div>
+                <div class="stat-value" id="statCantidad">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Promedio</div>
+                <div class="stat-value" id="statPromedio">$0</div>
+            </div>
+        </div>
+        
         <div class="table-section">
             <table id="tablaGastos">
                 <thead>
                     <tr>
-                        <th style="width: 15%">Fecha</th>
-                        <th style="width: 45%">Motivo</th>
-                        <th style="width: 25%">Valor</th>
-                        <th style="width: 15%">Acción</th>
+                        <th style="width: 10%">Fecha</th>
+                        <th style="width: 15%">Categoría</th>
+                        <th style="width: 20%">Motivo</th>
+                        <th style="width: 15%">Pagado a</th>
+                        <th style="width: 12%">Valor</th>
+                        <th style="width: 18%">Comentario</th>
+                        <th style="width: 10%">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
-                    <tr class="loading">
-                        <td colspan="4">Cargando gastos</td>
+                    <tr class="empty-state">
+                        <td colspan="7">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p>No hay gastos que coincidan con los filtros</p>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         
         <div class="total-section">
-            <span class="total-label">Total Gastos:</span>
+            <span class="total-label">Total Filtrado:</span>
             <span class="total-amount" id="totalGastos">$0</span>
         </div>
     </div>
     
-    <!-- Supabase SDK -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
         
-        // ============================================
-        // CONFIGURACIÓN DE SUPABASE
-        // ============================================
         const SUPABASE_URL = 'https://uqulhiwaozqfmjaqgigx.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxdWxoaXdhb3pxZm1qYXFnaWd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0Njg0OTEsImV4cCI6MjA3ODA0NDQ5MX0.zn2jZ_ZBetn2CQLkUInyNG83sY-Fixtatpl4by9OJDY';
         
-        // Verificar si está configurado
-        const isConfigured = true;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        if (!isConfigured) {
-            document.getElementById('configAlert').style.display = 'block';
-            actualizarEstadoConexion(false, 'No configurado');
-        }
+        let todosLosGastos = [];
         
-        // Inicializar Supabase
-        let supabase;
-        
-        try {
-            if (isConfigured) {
-                supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                actualizarEstadoConexion(true, 'Conectado');
-                cargarGastos();
-            }
-        } catch (error) {
-            console.error("Error al inicializar Supabase:", error);
-            actualizarEstadoConexion(false, 'Error de conexión');
-        }
-        
-        // ============================================
-        // FUNCIONES PRINCIPALES
-        // ============================================
-        
-        // Establecer fecha actual por defecto
         document.getElementById('fecha').valueAsDate = new Date();
         
-        // Formatear número a pesos colombianos
         function formatCOP(valor) {
             return new Intl.NumberFormat('es-CO', {
                 style: 'currency',
@@ -360,42 +491,71 @@
             }).format(valor);
         }
         
-        // Actualizar estado de conexión
-        function actualizarEstadoConexion(conectado, mensaje) {
-            const statusDiv = document.getElementById('syncStatus');
-            const iconSpan = document.getElementById('syncIcon');
-            const textSpan = document.getElementById('syncText');
-            
-            if (conectado) {
-                statusDiv.className = 'sync-status connected';
-                iconSpan.textContent = '✓';
-                textSpan.textContent = mensaje || 'Sincronizado';
-            } else {
-                statusDiv.className = 'sync-status disconnected';
-                iconSpan.textContent = '✗';
-                textSpan.textContent = mensaje || 'Desconectado';
-            }
+        function getCategoriaClass(categoria) {
+            const clases = {
+                'Servicios': 'cat-servicios',
+                'Mercado': 'cat-mercado',
+                'Transporte': 'cat-transporte',
+                'Construcción': 'cat-mantenimiento',
+                'Salud': 'cat-salud',
+                'Entretenimiento': 'cat-entretenimiento',
+                'Otros': 'cat-otros'
+            };
+            return clases[categoria] || 'cat-otros';
         }
         
-        // Calcular y mostrar total
-        function calcularTotal(gastos) {
-            const total = gastos.reduce((sum, gasto) => sum + (gasto.valor || 0), 0);
+        function aplicarFiltros() {
+            const filterCategoria = document.getElementById('filterCategoria').value.toLowerCase();
+            const filterPagadoA = document.getElementById('filterPagadoA').value.toLowerCase();
+            const filterMotivo = document.getElementById('filterMotivo').value.toLowerCase();
+            const filterFechaDesde = document.getElementById('filterFechaDesde').value;
+            const filterFechaHasta = document.getElementById('filterFechaHasta').value;
+            
+            const gastosFiltrados = todosLosGastos.filter(gasto => {
+                const cumpleCategoria = !filterCategoria || gasto.categoria.toLowerCase().includes(filterCategoria);
+                const cumplePagadoA = !filterPagadoA || (gasto.pagado_a && gasto.pagado_a.toLowerCase().includes(filterPagadoA));
+                const cumpleMotivo = !filterMotivo || gasto.motivo.toLowerCase().includes(filterMotivo);
+                const cumpleFechaDesde = !filterFechaDesde || gasto.fecha >= filterFechaDesde;
+                const cumpleFechaHasta = !filterFechaHasta || gasto.fecha <= filterFechaHasta;
+                
+                return cumpleCategoria && cumplePagadoA && cumpleMotivo && cumpleFechaDesde && cumpleFechaHasta;
+            });
+            
+            renderizarTabla(gastosFiltrados);
+            actualizarEstadisticas(gastosFiltrados);
+        }
+        
+        window.limpiarFiltros = function() {
+            document.getElementById('filterCategoria').value = '';
+            document.getElementById('filterPagadoA').value = '';
+            document.getElementById('filterMotivo').value = '';
+            document.getElementById('filterFechaDesde').value = '';
+            document.getElementById('filterFechaHasta').value = '';
+            aplicarFiltros();
+        };
+        
+        function actualizarEstadisticas(gastos) {
+            const total = gastos.reduce((sum, g) => sum + (g.valor || 0), 0);
+            const cantidad = gastos.length;
+            const promedio = cantidad > 0 ? total / cantidad : 0;
+            
+            document.getElementById('statTotal').textContent = formatCOP(total);
+            document.getElementById('statCantidad').textContent = cantidad;
+            document.getElementById('statPromedio').textContent = formatCOP(promedio);
             document.getElementById('totalGastos').textContent = formatCOP(total);
         }
         
-        // Renderizar tabla
         function renderizarTabla(gastos) {
             const tbody = document.getElementById('cuerpoTabla');
             
             if (!gastos || gastos.length === 0) {
                 tbody.innerHTML = `
                     <tr class="empty-state">
-                        <td colspan="4">
+                        <td colspan="7">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <p>No hay gastos registrados aún</p>
-                            <p style="font-size: 14px; margin-top: 5px;">Agrega tu primer gasto usando el formulario arriba</p>
+                            <p>No hay gastos que coincidan con los filtros</p>
                         </td>
                     </tr>
                 `;
@@ -405,29 +565,19 @@
             tbody.innerHTML = gastos.map(gasto => `
                 <tr>
                     <td>${new Date(gasto.fecha).toLocaleDateString('es-CO')}</td>
+                    <td><span class="categoria-badge ${getCategoriaClass(gasto.categoria)}">${gasto.categoria}</span></td>
                     <td>${gasto.motivo}</td>
+                    <td>${gasto.pagado_a || '-'}</td>
                     <td><strong>${formatCOP(gasto.valor)}</strong></td>
+                    <td style="font-size: 12px; color: #666;">${gasto.comentario || '-'}</td>
                     <td>
-                        <button class="btn-eliminar" onclick="eliminarGasto(${gasto.id})">🗑️ Eliminar</button>
+                        <button class="btn-eliminar" onclick="eliminarGasto(${gasto.id})">🗑️</button>
                     </td>
                 </tr>
             `).join('');
         }
         
-        // Cargar gastos desde Supabase
         async function cargarGastos() {
-            if (!isConfigured) {
-                document.getElementById('cuerpoTabla').innerHTML = `
-                    <tr class="empty-state">
-                        <td colspan="4">
-                            <p style="color: #ff6b6b;">⚠️ Supabase no configurado</p>
-                            <p style="font-size: 14px; margin-top: 10px;">Por favor configura Supabase siguiendo las instrucciones</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
             try {
                 const { data, error } = await supabase
                     .from('gastos')
@@ -436,44 +586,40 @@
                 
                 if (error) throw error;
                 
-                renderizarTabla(data);
-                calcularTotal(data);
+                todosLosGastos = data;
+                aplicarFiltros();
             } catch (error) {
                 console.error("Error al cargar gastos:", error);
-                actualizarEstadoConexion(false, 'Error al cargar');
             }
         }
         
-        // Agregar gasto
         document.getElementById('gastoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            if (!isConfigured) {
-                alert('Por favor configura Supabase primero. Revisa las instrucciones.');
-                return;
-            }
             
             const btnAgregar = document.getElementById('btnAgregar');
             btnAgregar.disabled = true;
             btnAgregar.textContent = 'Guardando...';
             
             try {
-                const fecha = document.getElementById('fecha').value;
-                const motivo = document.getElementById('motivo').value;
-                const valor = parseInt(document.getElementById('valor').value);
-                
                 const { error } = await supabase
                     .from('gastos')
-                    .insert([{ fecha, motivo, valor }]);
+                    .insert([{
+                        fecha: document.getElementById('fecha').value,
+                        categoria: document.getElementById('categoria').value,
+                        motivo: document.getElementById('motivo').value,
+                        pagado_a: document.getElementById('pagado_a').value || null,
+                        valor: parseInt(document.getElementById('valor').value),
+                        comentario: document.getElementById('comentario').value || null
+                    }]);
                 
                 if (error) throw error;
                 
-                // Limpiar formulario
                 document.getElementById('motivo').value = '';
+                document.getElementById('pagado_a').value = '';
                 document.getElementById('valor').value = '';
+                document.getElementById('comentario').value = '';
                 document.getElementById('motivo').focus();
                 
-                // Recargar gastos
                 await cargarGastos();
                 
             } catch (error) {
@@ -485,7 +631,6 @@
             }
         });
         
-        // Eliminar gasto (función global)
         window.eliminarGasto = async (id) => {
             if (!confirm('¿Estás seguro de eliminar este gasto?')) return;
             
@@ -497,44 +642,33 @@
                 
                 if (error) throw error;
                 
-                // Recargar gastos
                 await cargarGastos();
             } catch (error) {
                 console.error("Error al eliminar gasto:", error);
-                alert('Error al eliminar el gasto. Por favor intenta de nuevo.');
+                alert('Error al eliminar el gasto.');
             }
         };
         
-        // Suscribirse a cambios en tiempo real
-        if (isConfigured && supabase) {
-            supabase
-                .channel('gastos-changes')
-                .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'gastos' },
-                    () => {
-                        cargarGastos();
-                    }
-                )
-                .subscribe();
-        }
+        // Event listeners para filtros
+        document.getElementById('filterCategoria').addEventListener('change', aplicarFiltros);
+        document.getElementById('filterPagadoA').addEventListener('input', aplicarFiltros);
+        document.getElementById('filterMotivo').addEventListener('input', aplicarFiltros);
+        document.getElementById('filterFechaDesde').addEventListener('change', aplicarFiltros);
+        document.getElementById('filterFechaHasta').addEventListener('change', aplicarFiltros);
         
-        // Mostrar instrucciones
-        window.mostrarInstrucciones = () => {
-            alert(`
-📋 INSTRUCCIONES DE CONFIGURACIÓN:
-
-1. Ve a https://supabase.com
-2. Crea una cuenta gratuita
-3. Crea un nuevo proyecto
-4. Ve a "Table Editor" y crea la tabla "gastos"
-5. Copia la URL y la ANON KEY
-6. Reemplázalas en el código HTML
-7. ¡Listo!
-
-Revisa el archivo de instrucciones detalladas.
-            `);
-        };
+        // Suscripción a cambios en tiempo real
+        supabase
+            .channel('gastos-changes')
+            .on('postgres_changes', 
+                { event: '*', schema: 'public', table: 'gastos' },
+                () => {
+                    cargarGastos();
+                }
+            )
+            .subscribe();
         
+        // Cargar datos iniciales
+        cargarGastos();
     </script>
 </body>
 </html>
